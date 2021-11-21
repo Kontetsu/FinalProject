@@ -79,31 +79,33 @@ resource "kubernetes_namespace" "hello-world-namespace" {
 
 resource "kubernetes_deployment" "backend" {
   metadata {
-    name                = "quiz-backend-update"
-    namespace           = "testenv"
+    name                    = "backend"
+    namespace               = "testenv"
   }
   spec {
-    replicas            = 2
+    replicas = 1
     selector {
-      match_labels      = {
-        app             = "quiz-backend-update"
+      match_labels = {
+        app = "backend"
+        tier = "backend"
       }
     }
     template {
       metadata {
-          labels        = {
-            app         = "quiz-backend-update"
-          }
+        labels = {
+          app = "backend"
+          tier = "backend"
+        }
       }
       spec {
         container {
-          image             = "kontetsu/backend-update:v1"
+          image = "kontetsu/backend-update:v1"
           image_pull_policy = "Always"
-          name              = "quiz-backend-update"
+          name = "backend"
           port {
-            container_port  = 8080
-            name            = "http"
-            protocol        = "TCP"
+            container_port = 8080
+            name = "http"
+            protocol = "TCP"
           }
         }
       }
@@ -111,22 +113,22 @@ resource "kubernetes_deployment" "backend" {
   }
 }
 
-resource "kubernetes_service" "backendservice" {
+resource "kubernetes_service" "backend" {
   metadata {
-    name                    = "quiz-backend-update"
+    name                    = "backend"
     namespace               = "testenv"
   }
-  
   spec {
     port {
-      port                  = 8080
-      protocol              = "TCP"
-      target_port           = 8080
+      port = 8080
+      protocol = "TCP"
+      target_port = 8080
     }
-    selector                = {
-      app                   = "quiz-backend-update"
+    selector = {
+      app                 = "backend"
+      tier                = "backend"
     }
-    type                    = "ClusterIP"
+    type = "ClusterIP"
   }
 }
 
@@ -222,7 +224,7 @@ resource "kubernetes_ingress" "ingress" {
         path {
           path = "/api/quiz/select?(.*)"
           backend {
-            service_name = "quiz-backend-update"
+            service_name = "backend"
             service_port = 8080
           }
         }
