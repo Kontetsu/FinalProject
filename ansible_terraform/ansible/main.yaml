@@ -51,32 +51,27 @@
       user:
         name: ergi
         group: docker
+    # Clone Repositories
     - name: Clone github repository quiz-backend-update
       git:
         repo: https://github.com/Kontetsu/quiz-backend-update.git
         dest: /home/ergi/quiz-backend-update
         clone: yes
         update: yes
+    # Clone Repositories
     - name: Clone github repository quiz-frontend-update
       git:
         repo: https://github.com/Kontetsu/quiz-frontend-update.git
         dest: /home/ergi/quiz-frontend-update
         clone: yes
         update: yes
+    # Build backend image with shell command    
     - name: build backend image
-      docker_image:
-        name: backend:v01
-        build:
-          path: /home/ergi/quiz-backend-update/
-          source: build
-        state: present 
-    - name: build frontend image
-      docker_image:
-        name: frontend:v01
-        build:
-          path: /home/ergi/quiz-backend-update/
-          source: build
-        state: present 
+      shell: docker built -t backend:v01 -f home/ergi/quiz-frontend-update/
+    # Build backend image with shell command
+    - name: build backend image
+      shell: docker built -t frontend:v01 -f home/ergi/quiz-frontend-update/
+    # Create backend container
     - name: Create backend container
       docker_container:
         name: backend
@@ -84,6 +79,7 @@
         state: started
         recreate: yes
         published_ports: 8080:8080
+    # Create Frontend container
     - name: Create backend container
       docker_container:
         name: frontend
