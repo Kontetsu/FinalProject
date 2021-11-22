@@ -67,22 +67,42 @@
         update: yes
     # Build backend image with shell command    
     - name: build backend image
-      shell: docker built -t backend:v01 -f home/ergi/quiz-frontend-update/
-    # Build backend image with shell command
-    - name: build backend image
-      shell: docker built -t frontend:v01 -f home/ergi/quiz-frontend-update/
+      docker_image:
+        name: backend
+        tag: v01
+        build:
+          path: /home/ergi/quiz-backend-update/
+        source: build
+        state: present 
+    - name: build frontend image
+      docker_image:
+        name: frontend
+        tag: v01
+        build:
+          path: /home/ergi/quiz-frontend-update/
+        source: build
+        state: present
     # Create backend container
+    - name: Create a network
+      docker_network:
+        name: quiz
     - name: Create backend container
       docker_container:
         name: backend
+        hostname: backend
+        networks:
+          - name: quiz
         image: backend:v01
         state: started
         recreate: yes
         published_ports: 8080:8080
     # Create Frontend container
-    - name: Create backend container
+    - name: Create frontend container
       docker_container:
         name: frontend
+        hostname: frontend
+        networks:
+          - name: quiz
         image: frontend:v01
         state: started
         recreate: yes
