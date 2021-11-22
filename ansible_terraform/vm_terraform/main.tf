@@ -166,9 +166,13 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     version   = "latest"
   }
 
-  computer_name = "terraformvm"
-  admin_username = "ergi"
-  disable_password_authentication = true
+  # computer_name = "terraformvm"
+  # admin_username = "ergi"
+  # disable_password_authentication = true
+  computer_name                   = "terraformvm"
+  admin_username                  = "ergi"
+  disable_password_authentication = false
+  admin_password                  = var.admin_password
   
   admin_ssh_key {
     username = "ergi"
