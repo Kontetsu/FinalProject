@@ -30,6 +30,7 @@ DONE
 9.  (Bonus: 12pt): Do all the above in automated way with a tool of your choice (Ansible / Terraform / Python / Kubernetes ...)
 
 === Extra ===
+
 separate Kubernetes cluster as a test env
 1. yes, or at least in two different containers (edited) 
 2. each VM is connected to a network, which can be configured (both using Azure Portal and Terraform / CLI). By default they go to the same network, but you're free to connect them however you want
