@@ -70,12 +70,6 @@ resource "kubernetes_namespace" "testenv" {
     name                = "testenv"
   }
 }
-resource "kubernetes_namespace" "hello-world-namespace" {
-  metadata {
-    name                = "hello-world-namespace"
-  }
-}
-
 
 resource "kubernetes_deployment" "backend" {
   metadata {
