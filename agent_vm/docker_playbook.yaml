@@ -1,0 +1,53 @@
+---
+- hosts: jenkinsagent
+  become: yes
+  tasks:
+    - name: update_cache
+      apt:
+        update_cache: yes
+    - name: install Dependencies
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - gnupg-agent
+    - name: install python
+      apt:
+        name: "{{ packages }}"
+        state: latest
+      vars:
+        packages:
+        - python3
+        - python3-pip
+    - name: Install Docker python module
+      pip:
+        name: docker
+        state: latest
+    - name: Add an apt signing key for Docker
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add repository for stable Docker
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+    - name: Install Docker
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+    - name: Add user to docker group
+      user:
+        name: ergi
+        group: docker
